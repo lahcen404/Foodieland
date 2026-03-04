@@ -11,17 +11,22 @@ return new class extends Migration
      */
     public function up(): void
 {
+
+
     Schema::create('recipes', function (Blueprint $table) {
         $table->id();
         $table->string('title');
+        $table->string('author_name')->default('John Smith');
         $table->text('description')->nullable();
         $table->string('image_url')->nullable();
         $table->integer('prep_time')->default(0);
         $table->integer('cook_time')->default(0);
+        $table->integer('calories')->default(0);
         $table->string('category');
         $table->boolean('is_healthy')->default(false);
-        $table->timestamps(); 
+        $table->timestamps();
     });
+
 }
 
     /**

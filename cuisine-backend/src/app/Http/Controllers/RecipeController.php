@@ -8,40 +8,45 @@ use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
-    // list all recipess + search logic
-    public function index(Request $request) {
-        $query = Recipe::query();
 
-        // filter by title or category
-        if ($request->search) {
-            $query->where('title', 'like', "%{$request->search}%")
-                  ->orWhere('category', 'like', "%{$request->search}%");
-        }
+    // list recipes with search and category filter
+public function index(Request $request) {
+    $query = Recipe::query();
 
-        return $query->latest()->get();
+    // search by title
+    if ($request->search) {
+        $query->where('title', 'like', "%{$request->search}%");
     }
 
-    // create new recipe
-    public function store(Request $request) {
-        $data = $request->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-            'image_url' => 'nullable|string',
-            'prep_time' => 'integer',
-            'cook_time' => 'integer',
-            'category' => 'required|string',
-            'is_healthy' => 'boolean'
-        ]);
-
-        return Recipe::create($data);
+    // filter by category (
+    if ($request->category) {
+        $query->where('category', $request->category);
     }
+
+    return $query->latest()->get(); // return all matching
+}
+
+// save new recipe from admin dashboard
+public function store(Request $request) {
+    $data = $request->validate([
+        'title' => 'required',
+        'category' => 'required',
+        'description' => 'required',
+        'prep_time' => 'integer',
+        'cook_time' => 'integer',
+        'calories' => 'integer',
+        'is_healthy' => 'boolean'
+    ]);
+
+    return Recipe::create($data); // create record
+}
 
     // show one recipe details
     public function show(Recipe $recipe) {
         return $recipe;
     }
 
-    // update recipe 
+    // update recipe
     public function update(Request $request, Recipe $recipe) {
         $recipe->update($request->all());
         return $recipe;
