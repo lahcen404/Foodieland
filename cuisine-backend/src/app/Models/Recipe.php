@@ -10,12 +10,7 @@ class Recipe extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'image_url',
-        'prep_time',
-        'cook_time',
-        'category',
-        'is_healthy',
+        'title', 'author_name', 'description', 'image_url',
+    'prep_time', 'cook_time', 'calories', 'category', 'is_healthy'
     ];
 }
