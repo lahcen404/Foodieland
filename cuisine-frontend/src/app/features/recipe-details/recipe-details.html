@@ -14,6 +14,11 @@
   }
 
   @else if (recipe(); as data) {
+    <!-- Back Button -->
+    <button (click)="goBack()" class="flex items-center gap-2 text-food-orange hover:text-orange-600 font-semibold mb-8 transition-colors">
+      ← Back to Home
+    </button>
+
     <div class="mb-10">
       <h1 class="text-4xl lg:text-5xl font-bold mb-8 text-black">{{ data.title }}</h1>
 
