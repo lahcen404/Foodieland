@@ -1,5 +1,10 @@
+export interface Ingredient {
+  name: string;
+  quantity: string;
+}
+
 export interface Recipe {
-  id?: number;              
+  id?: number;
   title: string;
   category: string;
   description: string;
@@ -10,4 +15,5 @@ export interface Recipe {
   image_url?: string;
   author?: string;
   created_at?: string;
+  ingredients?: Ingredient[];
 }

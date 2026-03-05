@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Recipe } from '../../../core/services/recipe/recipe';
+import { Router } from '@angular/router';
+import { Recipe } from '../../../core/models/recipe.model';
 
 @Component({
   selector: 'app-recipe-card',
@@ -12,4 +13,10 @@ import { Recipe } from '../../../core/services/recipe/recipe';
 export class RecipeCard {
   @Input() recipe!: Recipe;
   @Input() bgLight = false;
+
+  constructor(private router: Router) {}
+
+  onRecipeClick(): void {
+    this.router.navigate(['/recipe', this.recipe.id]);
+  }
 }

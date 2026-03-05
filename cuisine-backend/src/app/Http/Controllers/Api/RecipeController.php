@@ -39,7 +39,10 @@ public function store(Request $request) {
         'prep_time' => 'integer',
         'cook_time' => 'integer',
         'calories' => 'integer',
-        'is_healthy' => 'boolean'
+        'is_healthy' => 'boolean',
+        'author_name' => 'string',
+        'image_url' => 'string',
+        'ingredients' => 'array'
     ]);
 
     return Recipe::create($data); // create record
