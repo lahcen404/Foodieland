@@ -1,0 +1,91 @@
+<div class="max-w-[1280px] mx-auto px-10 py-10">
+
+
+  <!-- featured hero recipe -->
+  <section *ngIf="featuredRecipe() as hero" class="flex flex-col lg:flex-row bg-food-light rounded-3xl overflow-hidden mb-16">
+    <div class="flex-1 p-12 lg:p-20 flex flex-col justify-center">
+      <span class="bg-white px-4 py-2 rounded-full text-xs font-bold w-fit mb-6 shadow-sm">
+        📜 Hot Recipes
+      </span>
+      <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+        {{ hero.title }}
+      </h1>
+      <p class="text-gray-500 mb-8 max-w-md leading-relaxed">
+        {{ hero.description }}
+      </p>
+
+      <div class="flex gap-4 mb-10">
+        <span class="bg-black/5 px-4 py-2 rounded-full text-sm font-semibold">
+          ⏱ {{ hero.prep_time + hero.cook_time }} Minutes
+        </span>
+        <span class="bg-black/5 px-4 py-2 rounded-full text-sm font-semibold">
+          🍗 {{ hero.category }}
+        </span>
+      </div>
+
+      <button class="bg-black text-white px-8 py-4 rounded-2xl w-fit font-bold hover:bg-gray-800 transition-all">
+        View Recipes ➔
+      </button>
+
+      <div class="flex items-center gap-3 mt-8">
+        <img [src]="hero.image_url || 'https://i.pravatar.cc/40'" alt="{{ hero.author || 'Chef' }}" class="w-10 h-10 rounded-full" />
+        <div class="text-sm text-gray-600">
+          <p class="font-semibold">{{ hero.author || 'Unknown' }}</p>
+          <p>{{ hero.created_at | date:'d MMM y' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1 min-h-[400px] bg-gray-200 relative">
+      <img [src]="hero.image_url" class="w-full h-full object-cover" />
+      <div class="absolute top-6 left-6 bg-white rounded-full p-3 shadow-lg flex items-center justify-center">
+        👍
+      </div>
+    </div>
+  </section>
+
+  <!-- categories section -->
+  <section class="mb-16">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-3xl font-bold">Categories</h2>
+      <button class="bg-food-light text-food-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-food-primary hover:text-white transition">
+        View All Categories
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+      <div *ngFor="let cat of categories" class="flex flex-col items-center bg-gradient-to-b from-white to-food-light rounded-3xl p-6 shadow-md hover:shadow-lg transition">
+        <div class="w-16 h-16 mb-4">
+          <img [src]="cat.icon" alt="{{cat.name}}" class="w-full h-full object-contain" />
+        </div>
+        <span class="font-semibold text-sm text-center">{{cat.name}}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- recipes grid -->
+  <section class="mb-16">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold">Simple and tasty recipes</h2>
+      <p class="text-gray-500 max-w-xl mx-auto mt-2">
+        Browse through all of our delicious options and find something that makes your mouth water.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let recipe of recipes(); let i = index"
+           [ngClass]="{'bg-food-light': i < 3}"
+           class="relative rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition">
+        <img [src]="recipe.image_url" alt="{{recipe.title}}" class="w-full h-48 object-cover" />
+        <div class="p-6">
+          <h3 class="font-semibold mb-2">{{recipe.title}}</h3>
+          <div class="flex gap-4 text-sm text-gray-600">
+            <span>⏱ {{recipe.prep_time + recipe.cook_time}} Minutes</span>
+            <span>🍴 {{recipe.category}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
