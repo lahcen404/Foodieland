@@ -17,7 +17,9 @@ export class HomeComponent implements OnInit {
 
 
   recipes = signal<Recipe[]>([]);
+  allRecipes = signal<Recipe[]>([]);
   featuredRecipe = signal<Recipe | null>(null);
+  selectedCategory = signal<string | null>(null);
 
   //  categories
 
@@ -35,6 +37,7 @@ export class HomeComponent implements OnInit {
     // fetch data from recipe service
     this.recipeService.getRecipes().subscribe({
       next: (data) => {
+        this.allRecipes.set(data);
         this.recipes.set(data);
 
         // set first recipe as featured
@@ -44,5 +47,19 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => console.error('Error fetching recipes:', err)
     });
+  }
+
+  onCategorySelect(categoryName: string): void {
+    // Tooggle category selection
+    if (this.selectedCategory() === categoryName) {
+      this.selectedCategory.set(null);
+      this.recipes.set(this.allRecipes());
+    } else {
+      this.selectedCategory.set(categoryName);
+      const filtered = this.allRecipes().filter(
+        recipe => recipe.category === categoryName
+      );
+      this.recipes.set(filtered);
+    }
   }
 }

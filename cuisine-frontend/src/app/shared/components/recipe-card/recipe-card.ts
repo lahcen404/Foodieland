@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Recipe } from '../../core/models/recipe.model';
+import { Recipe } from '../../../core/services/recipe/recipe';
 
 @Component({
   selector: 'app-recipe-card',
