@@ -1,0 +1,175 @@
+
+---
+
+# 🍳 Foodieland. – Full-Stack Recipe Platform
+
+**Foodieland.** is a modern full-stack web application for recipe discovery and management.
+The project combines a powerful **Laravel 8.2 REST API** with a dynamic **Angular 21 frontend**, fully containerized using **Docker** for seamless development and deployment.
+
+This project demonstrates clean architecture, secure authentication, PostgreSQL advanced querying, and professional API testing practices.
+
+---
+
+# 🚀 Technology Stack
+
+## 🔹 Backend – Laravel 8.2
+
+* Framework: Laravel 8.2
+* Authentication: Laravel Sanctum (Bearer Token)
+* Database: PostgreSQL
+* Architecture: RESTful API
+* Features:
+
+  * Case-insensitive search using PostgreSQL `ILIKE`
+  * Category filtering
+  * Admin-only CRUD operations
+  * Database seeding
+  * Secure token-based authentication
+
+---
+
+## 🔹 Frontend – Angular v21
+
+* Angular v21
+* HttpClient for API communication
+* Reactive services architecture
+* SCSS / Tailwind CSS styling
+* Figma-based UI implementation
+* Modular and scalable structure
+
+---
+
+## 🔹 Infrastructure
+
+* Docker & Docker Compose
+* Nginx reverse proxy
+* Multi-container architecture
+* Isolated development environment
+
+---
+
+# 📂 Project Structure
+
+```
+CUISINE/
+├── cuisine-backend/      # Laravel REST API
+├── cuisine-frontend/     # Angular Application
+├── nginx/                # Nginx configuration
+└── docker-compose.yml    # Container orchestration
+```
+
+---
+
+# ⚙️ Installation & Setup
+
+## 1️⃣ Prerequisites
+
+Make sure you have installed:
+
+* Docker Desktop
+* Git
+
+---
+
+## 2️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/lahcen404/Foodieland
+cd cuisine-project
+cp .env.example .env
+```
+
+---
+
+## 3️⃣ Build & Run Containers
+
+```bash
+docker compose up -d --build
+```
+
+This command:
+
+* Builds Laravel backend container
+* Builds Angular frontend container
+* Starts PostgreSQL database
+* Configures Nginx reverse proxy
+
+---
+
+## 4️⃣ Backend Initialization
+
+Run inside backend container:
+
+```bash
+docker compose exec cuisine-backend composer install
+docker compose exec cuisine-backend php artisan key:generate
+docker compose exec cuisine-backend php artisan migrate:refresh --seed
+```
+
+The seeder populates the database with demo recipes.
+
+---
+
+# 📡 API Documentation
+
+## 🌍 Public Endpoints
+
+| Method | Endpoint                   | Description                                |
+| ------ | -------------------------- | ------------------------------------------ |
+| GET    | /api/recipes               | Retrieve all recipes                       |
+| GET    | /api/recipes?search=Salmon | Search recipes by title (case-insensitive) |
+| GET    | /api/recipes?category=Meat | Filter recipes by category                 |
+
+---
+
+## 🔐 Protected Admin Endpoints
+
+Requires Bearer Token from:
+
+```
+POST /api/login
+```
+
+| Method | Endpoint          | Description       |
+| ------ | ----------------- | ----------------- |
+| POST   | /api/recipes      | Create new recipe |
+| PUT    | /api/recipes/{id} | Update recipe     |
+| DELETE | /api/recipes/{id} | Delete recipe     |
+
+---
+
+# 📬 Postman Collection
+
+To simplify API testing and demonstration, a complete Postman collection is available.
+
+🔗 **Public Postman Collection Link:**
+
+[https://yguhijopl.postman.co/workspace/My-Workspace~49aab289-6de5-487b-8f91-58ce1aacf8db/collection/41299916-934216d1-5599-4478-b6ab-9d1399fa8875?action=share&creator=41299916](https://yguhijopl.postman.co/workspace/My-Workspace~49aab289-6de5-487b-8f91-58ce1aacf8db/collection/41299916-934216d1-5599-4478-b6ab-9d1399fa8875?action=share&creator=41299916)
+
+The collection includes:
+
+* Authentication (Login)
+* Get all recipes
+* Search functionality
+* Category filtering
+* Admin CRUD operations
+
+This demonstrates structured API testing and professional backend validation workflow.
+
+---
+
+# 🎯 What This Project Demonstrates
+
+* Full-stack development (Laravel + Angular)
+* Secure API design
+* PostgreSQL query optimization
+* Containerized deployment
+* Frontend–Backend integration
+* Professional testing workflow (Postman)
+
+---
+
+# 👨‍💻 Author
+
+**Lahcen Ait Maskour**
+---
