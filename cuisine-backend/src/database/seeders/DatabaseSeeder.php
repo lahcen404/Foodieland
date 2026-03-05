@@ -16,6 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+    $this->call([
+        RecipeSeeder::class,
+    ]);
+
+    
        User::factory()->create([
         'name' => 'Lahcen Admin',
         'email' => 'lahcen.maskour2003@gmail.com',
