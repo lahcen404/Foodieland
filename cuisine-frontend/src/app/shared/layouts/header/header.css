@@ -1,0 +1,15 @@
+.bg-food-orange {
+  background-color: #ff6b35;
+}
+
+.text-food-orange {
+  color: #ff6b35;
+}
+
+.hover\:bg-orange-600:hover {
+  background-color: #e55a24;
+}
+
+.hover\:text-food-orange:hover {
+  color: #ff6b35;
+}

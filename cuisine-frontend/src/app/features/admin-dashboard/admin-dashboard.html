@@ -1,1 +1,229 @@
-<p>admin-dashboard works!</p>
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+      <p class="text-gray-600">Manage recipes and content</p>
+    </div>
+
+    <!-- Messages -->
+    <div *ngIf="successMessage()" class="bg-green-50 border border-green-200 text-green-700 px-4 py-4 rounded-lg mb-6">
+      {{ successMessage() }}
+    </div>
+    <div *ngIf="errorMessage()" class="bg-red-50 border border-red-200 text-red-700 px-4 py-4 rounded-lg mb-6">
+      {{ errorMessage() }}
+    </div>
+
+    <!-- Add/Edit Recipe Section -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">
+          {{ isEditMode() ? 'Edit Recipe' : 'Add New Recipe' }}
+        </h2>
+        <button *ngIf="showForm()"
+            (click)="toggleFormVisibility()"
+            class="text-gray-600 hover:text-gray-900 font-semibold"
+          >
+            ✕ Cancel
+          </button>
+      </div>
+
+      <ng-container *ngIf="showForm(); else addButton">
+        <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Title -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Recipe Title</label>
+              <input
+                type="text"
+                formControlName="title"
+                placeholder="e.g., Pasta Carbonara"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+              <p *ngIf="recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched" class="text-red-500 text-xs mt-1">Title is required (min 3 characters)</p>
+            </div>
+
+            <!-- Category -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+              <select
+                formControlName="category"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              >
+                <option value="">Select category</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Meat">Meat</option>
+                <option value="Fish">Fish</option>
+                <option value="Healthy">Healthy</option>
+              </select>
+              <p *ngIf="recipeForm.get('category')?.invalid && recipeForm.get('category')?.touched" class="text-red-500 text-xs mt-1">Category is required</p>
+            </div>
+
+            <!-- Author Name -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Author Name</label>
+              <input
+                type="text"
+                formControlName="author_name"
+                placeholder="Chef name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+              <p *ngIf="recipeForm.get('author_name')?.invalid && recipeForm.get('author_name')?.touched" class="text-red-500 text-xs mt-1">Author name is required</p>
+            </div>
+
+            <!-- Image URL -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
+              <input
+                type="text"
+                formControlName="image_url"
+                placeholder="https://..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+            </div>
+
+            <!-- Prep Time -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Prep Time (minutes)</label>
+              <input
+                type="number"
+                formControlName="prep_time"
+                min="0"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+            </div>
+
+            <!-- Cook Time -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Cook Time (minutes)</label>
+              <input
+                type="number"
+                formControlName="cook_time"
+                min="0"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+            </div>
+
+            <!-- Calories -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Calories</label>
+              <input
+                type="number"
+                formControlName="calories"
+                min="0"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+              />
+            </div>
+
+            <!-- Is Healthy -->
+            <div class="flex items-center gap-4">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" formControlName="is_healthy" class="w-4 h-4">
+                <span class="text-sm font-semibold text-gray-700">Mark as Healthy</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+            <textarea
+              formControlName="description"
+              placeholder="Recipe description..."
+              rows="4"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-food-orange"
+            ></textarea>
+            <p *ngIf="recipeForm.get('description')?.invalid && recipeForm.get('description')?.touched" class="text-red-500 text-xs mt-1">Description is required (min 10 characters)</p>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            [disabled]="loading() || recipeForm.invalid"
+            class="w-full bg-food-orange hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-3 rounded-lg transition"
+          >
+            <span *ngIf="loading()" class="flex items-center justify-center gap-2">
+              <div class="animate-spin h-4 w-4 border-b-2 border-white rounded-full"></div>
+              Processing...
+            </span>
+            <span *ngIf="!loading()">{{ isEditMode() ? 'Update Recipe' : 'Add Recipe' }}</span>
+          </button>
+        </form>
+      </ng-container>
+      <ng-template #addButton>
+        <button
+          (click)="toggleFormVisibility()"
+          class="bg-food-orange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg transition"
+        >
+          + Add New Recipe
+        </button>
+      </ng-template>
+    </div>
+
+    <!-- Recipes Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="px-8 py-6 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900">Recipes</h2>
+      </div>
+
+      <div *ngIf="loading()" class="flex justify-center items-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-food-orange"></div>
+      </div>
+      <div *ngIf="!loading() && recipes().length === 0" class="text-center py-12">
+          <p class="text-gray-500">No recipes found. Create your first recipe!</p>
+      </div>
+      <div *ngIf="!loading() && recipes().length > 0" class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Title</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Category</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Author</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Times</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Healthy</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let recipe of recipes()" class="border-b border-gray-200 hover:bg-gray-50">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <img *ngIf="recipe.image_url" [src]="recipe.image_url" [alt]="recipe.title" class="w-10 h-10 rounded object-cover">
+                      <div class="font-semibold text-gray-900 line-clamp-1">{{ recipe.title }}</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-gray-600">{{ recipe.category }}</td>
+                  <td class="px-6 py-4 text-gray-600">{{ recipe.author_name || recipe.author || 'N/A' }}</td>
+                  <td class="px-6 py-4 text-gray-600 text-sm">
+                    ⏱ {{ recipe.prep_time }}m + {{ recipe.cook_time }}m
+                  </td>
+                  <td class="px-6 py-4">
+                    <ng-container *ngIf="recipe.is_healthy; else notHealthy">
+                      <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Yes</span>
+                    </ng-container>
+                    <ng-template #notHealthy>
+                      <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">No</span>
+                    </ng-template>
+                  </td>
+                  <td class="px-6 py-4 space-x-2">
+                    <button
+                      (click)="editRecipe(recipe)"
+                      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm font-semibold transition"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      (click)="deleteRecipe(recipe.id)"
+                      class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-semibold transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+</div>
+

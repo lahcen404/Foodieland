@@ -1,5 +1,70 @@
-<header class="bg-white">
-  <div class="max-w-[1280px] mx-auto px-10 py-4 flex items-center justify-center">
-    <img src="/img/logo/logo-foodieland.png" alt="Foodieland" class="h-20" />
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-[1280px] mx-auto px-10 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a routerLink="/home" class="flex items-center">
+      <img src="/img/logo/logo-foodieland.png" alt="Foodieland" class="h-20" />
+    </a>
+
+    <!-- Navigation -->
+    <nav class="hidden md:flex items-center gap-8">
+      @if (authService.isAuthenticated()) {
+        <a routerLink="/home" routerLinkActive="text-food-orange" class="text-gray-700 hover:text-food-orange transition font-semibold">Home</a>
+
+        @if (authService.userRole() === 'admin') {
+          <a routerLink="/admin" routerLinkActive="text-food-orange" class="text-gray-700 hover:text-food-orange transition font-semibold">Admin</a>
+        }
+
+        <div class="flex items-center gap-4 pl-8 border-l border-gray-200">
+          <span class="text-sm font-semibold">{{ authService.currentUser()?.name }}</span>
+          <button
+            (click)="logout()"
+            class="bg-food-orange text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition"
+          >
+            Logout
+          </button>
+        </div>
+      } @else {
+        <a routerLink="/login" class="text-gray-700 hover:text-food-orange transition font-semibold">Login</a>
+        <a routerLink="/register" class="bg-food-orange text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition">Sign Up</a>
+      }
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button
+      (click)="toggleMenu()"
+      class="md:hidden flex flex-col gap-1.5 cursor-pointer"
+    >
+      <span class="w-6 h-0.5 bg-gray-800 transition"></span>
+      <span class="w-6 h-0.5 bg-gray-800 transition"></span>
+      <span class="w-6 h-0.5 bg-gray-800 transition"></span>
+    </button>
+
+    <!-- Mobile Menu -->
+    @if (isMenuOpen) {
+      <div class="absolute top-24 left-0 right-0 bg-white shadow-lg md:hidden">
+        <nav class="flex flex-col gap-4 p-6">
+          @if (authService.isAuthenticated()) {
+            <a routerLink="/home" (click)="isMenuOpen = false" class="text-gray-700 hover:text-food-orange transition font-semibold">Home</a>
+
+            @if (authService.userRole() === 'admin') {
+              <a routerLink="/admin" (click)="isMenuOpen = false" class="text-gray-700 hover:text-food-orange transition font-semibold">Admin</a>
+            }
+
+            <div class="border-t border-gray-200 pt-4">
+              <p class="text-sm font-semibold mb-4">{{ authService.currentUser()?.name }}</p>
+              <button
+                (click)="logout()"
+                class="w-full bg-food-orange text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          } @else {
+            <a routerLink="/login" (click)="isMenuOpen = false" class="text-gray-700 hover:text-food-orange transition font-semibold">Login</a>
+            <a routerLink="/register" (click)="isMenuOpen = false" class="bg-food-orange text-white px-4 py-2 rounded-full font-semibold hover:bg-orange-600 transition text-center">Sign Up</a>
+          }
+        </nav>
+      </div>
+    }
   </div>
 </header>

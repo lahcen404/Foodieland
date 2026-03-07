@@ -75,8 +75,7 @@ export class RecipeDetails implements OnInit, OnDestroy {
   }
 
   onIngredientCheckboxChange(event: Event): void {
-    // This method handles the checkbox change for strikethrough effect
-    // The CSS handles the visual changes, this is just for potential future enhancements
+    
   }
 
   navigateToRecipe(id: number | undefined): void {
