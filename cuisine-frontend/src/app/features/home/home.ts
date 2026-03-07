@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
 import { RecipeCard } from '../../shared/components/recipe-card/recipe-card';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RecipeCard],
+  imports: [CommonModule, RecipeCard, ImageUrlPipe],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {

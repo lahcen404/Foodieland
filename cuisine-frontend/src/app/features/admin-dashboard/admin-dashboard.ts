@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ImageUrlPipe],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -23,6 +24,10 @@ export class AdminDashboard implements OnInit {
   isEditMode = signal<boolean>(false);
   editingId = signal<number | null>(null);
   showForm = signal<boolean>(false);
+
+  // Image upload signals
+  selectedImage = signal<File | null>(null);
+  imagePreview = signal<string | null>(null);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -70,10 +75,11 @@ export class AdminDashboard implements OnInit {
     this.successMessage.set('');
 
     const formData = this.recipeForm.value;
+    const image = this.selectedImage();
 
     if (this.isEditMode() && this.editingId()) {
       // Update recipe
-      this.recipeService.updateRecipe(this.editingId()!, formData).subscribe({
+      this.recipeService.updateRecipe(this.editingId()!, formData, image ?? undefined).subscribe({
         next: () => {
           this.successMessage.set('Recipe updated successfully!');
           this.loadRecipes();
@@ -88,7 +94,7 @@ export class AdminDashboard implements OnInit {
       });
     } else {
       // Create new recipe
-      this.recipeService.createRecipe(formData).subscribe({
+      this.recipeService.createRecipe(formData, image ?? undefined).subscribe({
         next: () => {
           this.successMessage.set('Recipe created successfully!');
           this.loadRecipes();
@@ -119,6 +125,10 @@ export class AdminDashboard implements OnInit {
       author_name: recipe.author_name || recipe.author || '',
       image_url: recipe.image_url,
     });
+    // Show existing image preview
+    if (recipe.image_url) {
+      this.imagePreview.set(recipe.image_url);
+    }
     window.scrollTo(0, 0);
   }
 
@@ -146,6 +156,45 @@ export class AdminDashboard implements OnInit {
     this.recipeForm.reset();
     this.isEditMode.set(false);
     this.editingId.set(null);
+    this.selectedImage.set(null);
+    this.imagePreview.set(null);
+  }
+
+  // Handle image file selection
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.errorMessage.set('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        this.errorMessage.set('Image size must be less than 2MB');
+        return;
+      }
+
+      this.selectedImage.set(file);
+      this.errorMessage.set('');
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear selected image
+  clearImage(): void {
+    this.selectedImage.set(null);
+    this.imagePreview.set(null);
+    this.recipeForm.patchValue({ image_url: '' });
   }
 
   toggleFormVisibility(): void {

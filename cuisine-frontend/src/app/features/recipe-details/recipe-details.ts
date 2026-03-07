@@ -5,11 +5,12 @@ import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-recipe-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ImageUrlPipe],
   templateUrl: './recipe-details.html',
   styleUrl: './recipe-details.css',
 })

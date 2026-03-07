@@ -28,7 +28,7 @@
       </button>
 
       <div class="flex items-center gap-3 mt-8">
-        <img [src]="hero.image_url || 'https://i.pravatar.cc/40'" alt="{{ hero.author || 'Chef' }}" class="w-10 h-10 rounded-full" />
+        <img [src]="hero.image_url | imageUrl || 'https://i.pravatar.cc/40'" alt="{{ hero.author || 'Chef' }}" class="w-10 h-10 rounded-full" />
         <div class="text-sm text-gray-600">
           <p class="font-semibold">{{ hero.author || 'Unknown' }}</p>
           <p>{{ hero.created_at | date:'d MMM y' }}</p>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="flex-1 min-h-[400px] bg-gray-200 relative">
-      <img [src]="hero.image_url" class="w-full h-full object-cover" />
+      <img [src]="hero.image_url | imageUrl" class="w-full h-full object-cover" />
       <div class="absolute top-6 left-6 bg-white rounded-full p-3 shadow-lg flex items-center justify-center">
         👍
       </div>
