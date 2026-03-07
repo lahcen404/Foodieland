@@ -13,6 +13,8 @@ export interface Recipe {
   calories: number;
   is_healthy: boolean;
   image_url?: string;
+  // file chosen from device (frontend only)
+  image?: File;
   author_name?: string;
   author?: string;
   created_at?: string;
