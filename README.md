@@ -8,6 +8,8 @@ The project combines a powerful **Laravel 8.2 REST API** with a dynamic **Angula
 
 This project demonstrates clean architecture, secure authentication, PostgreSQL advanced querying, and professional API testing practices.
 
+> **💡 Development workflow:** I work on each feature or task in its own Git branch. In this repository every task has its own branch, which is merged back to `main` when complete.
+
 ---
 
 # 🚀 Technology Stack
