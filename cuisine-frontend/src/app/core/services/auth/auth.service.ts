@@ -23,8 +23,7 @@ export class AuthService {
       tap((response) => {
         this.setToken(response.access_token);
         if (response.user) {
-          this.currentUser.set(response.user);
-          this.userRole.set(response.user.role);
+          this.saveUser(response.user);
           this.isAuthenticated.set(true);
         }
       })
@@ -37,8 +36,7 @@ export class AuthService {
         if (response.access_token) {
           this.setToken(response.access_token);
           if (response.user) {
-            this.currentUser.set(response.user);
-            this.userRole.set(response.user.role);
+            this.saveUser(response.user);
             this.isAuthenticated.set(true);
           }
         }
@@ -59,7 +57,7 @@ export class AuthService {
     this.isAuthenticated.set(true);
   }
 
-  private clearAuth(): void {
+  clearAuth(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     this.currentUser.set(null);
@@ -67,16 +65,24 @@ export class AuthService {
     this.isAuthenticated.set(false);
   }
 
+  public initializeAuthState(): void {
+    console.log('🔐 Initializing auth state from storage...');
+    this.loadUserFromStorage();
+  }
+
   private loadUserFromStorage(): void {
     const token = localStorage.getItem('auth_token');
     const user = localStorage.getItem('user');
+
+    if (token) {
+      this.isAuthenticated.set(true);
+    }
 
     if (token && user) {
       try {
         const parsedUser = JSON.parse(user);
         this.currentUser.set(parsedUser);
         this.userRole.set(parsedUser.role);
-        this.isAuthenticated.set(true);
       } catch (e) {
         this.clearAuth();
       }

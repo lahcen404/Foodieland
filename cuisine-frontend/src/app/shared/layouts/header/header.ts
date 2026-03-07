@@ -28,7 +28,7 @@ export class Header {
       error: (err) => {
         console.error('Logout failed:', err);
         // Still redirect even if logout fails on server
-        this.authService['clearAuth']();
+        this.authService.clearAuth();
         this.router.navigate(['/login']);
       }
     });

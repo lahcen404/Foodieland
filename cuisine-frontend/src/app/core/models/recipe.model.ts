@@ -13,6 +13,7 @@ export interface Recipe {
   calories: number;
   is_healthy: boolean;
   image_url?: string;
+  author_name?: string;
   author?: string;
   created_at?: string;
   ingredients?: Ingredient[];

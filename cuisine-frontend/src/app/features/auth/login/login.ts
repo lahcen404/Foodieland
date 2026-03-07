@@ -45,16 +45,25 @@ export class LoginComponent {
       password: this.loginForm.value.password,
     };
 
+    console.log('🔑 Attempting login with:', credentials.email);
+
     this.authService.login(credentials).subscribe({
       next: (response) => {
+        console.log('✅ Login successful! Token:', response.access_token?.substring(0, 20) + '...');
+        console.log('👤 User:', response.user);
+
         // Save user info to localStorage if available
         if (response.user) {
           this.authService.saveUser(response.user);
+          console.log('💾 User saved to localStorage');
         }
+
         this.loading.set(false);
+        console.log('🚀 Redirecting to /home...');
         this.router.navigate(['/home']);
       },
       error: (error) => {
+        console.error('❌ Login error:', error);
         this.loading.set(false);
         this.errorMessage.set(error.error?.message || 'Login failed. Please try again.');
       }

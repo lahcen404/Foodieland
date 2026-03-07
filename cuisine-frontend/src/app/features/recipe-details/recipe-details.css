@@ -40,3 +40,4 @@ input[type="checkbox"]:checked ~ .ingredient-text {
 
 .ingredient-label input[type="checkbox"]:checked ~ .ingredient-text span {
   text-decoration: line-through;
+}
