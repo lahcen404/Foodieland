@@ -1,0 +1,43 @@
+
+.bg-food-light {
+  background-color: #E7FAFE;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  background-color: transparent;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #E5E7EB;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em black;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+/* Strikethrough and transparency on checked */
+input[type="checkbox"]:checked ~ .ingredient-text {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.ingredient-label input[type="checkbox"]:checked ~ .ingredient-text span {
+  text-decoration: line-through;
+}

@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --food-light: #f0fcff;
+  --food-primary: #00a8e8;
+}
+
+
+.bg-food-light { background-color: var(--food-light) !important; }
+.text-food-primary { color: var(--food-primary) !important; }
+.bg-food-primary { background-color: var(--food-primary) !important; }

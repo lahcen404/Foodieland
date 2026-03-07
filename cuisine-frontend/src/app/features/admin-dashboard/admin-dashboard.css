@@ -1,0 +1,28 @@
+/* Admin Dashboard Styles */
+.bg-food-orange {
+  background-color: #ff6b35;
+}
+
+.hover\:bg-orange-600:hover {
+  background-color: #e55a24;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}

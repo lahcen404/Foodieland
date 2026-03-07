@@ -11,6 +11,11 @@ class Recipe extends Model
 
     protected $fillable = [
         'title', 'author_name', 'description', 'image_url',
-    'prep_time', 'cook_time', 'calories', 'category', 'is_healthy'
+        'prep_time', 'cook_time', 'calories', 'category', 'is_healthy', 'ingredients'
+    ];
+
+    protected $casts = [
+        'ingredients' => 'array',
+        'is_healthy' => 'boolean',
     ];
 }
