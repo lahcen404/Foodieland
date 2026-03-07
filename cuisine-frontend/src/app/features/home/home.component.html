@@ -28,7 +28,7 @@
       </button>
 
       <div class="flex items-center gap-3 mt-8">
-        <img [src]="hero.image_url | imageUrl || 'https://i.pravatar.cc/40'" alt="{{ hero.author || 'Chef' }}" class="w-10 h-10 rounded-full" />
+        <img [src]="hero.image_url | imageUrl" alt="{{ hero.author || 'Chef' }}" class="w-10 h-10 rounded-full" />
         <div class="text-sm text-gray-600">
           <p class="font-semibold">{{ hero.author || 'Unknown' }}</p>
           <p>{{ hero.created_at | date:'d MMM y' }}</p>
@@ -40,6 +40,51 @@
       <img [src]="hero.image_url | imageUrl" class="w-full h-full object-cover" />
       <div class="absolute top-6 left-6 bg-white rounded-full p-3 shadow-lg flex items-center justify-center">
         👍
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <section class="mb-12">
+    <div class="max-w-2xl mx-auto">
+      <div class="relative">
+        <input
+          type="text"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Search recipes by title or category..."
+          class="w-full px-6 py-4 pl-14 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-food-primary focus:ring-2 focus:ring-food-primary/20 transition-all"
+        />
+        <!-- Search Icon -->
+        <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <!-- Loading Spinner -->
+        <div *ngIf="searchLoading()" class="absolute right-5 top-1/2 -translate-y-1/2">
+          <div class="animate-spin h-5 w-5 border-2 border-food-primary border-t-transparent rounded-full"></div>
+        </div>
+        <!-- Clear Button -->
+        <button
+          *ngIf="searchTerm() && !searchLoading()"
+          (click)="clearSearch()"
+          class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Active Filters -->
+      <div *ngIf="searchTerm() || selectedCategory()" class="flex items-center gap-2 mt-4 flex-wrap">
+        <span class="text-sm text-gray-500">Active filters:</span>
+        <span *ngIf="searchTerm()" class="bg-food-light text-food-primary px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+          "{{ searchTerm() }}"
+          <button (click)="searchTerm.set(''); performSearch()" class="hover:text-food-primary/70">✕</button>
+        </span>
+        <span *ngIf="selectedCategory()" class="bg-food-light text-food-primary px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+          {{ selectedCategory() }}
+          <button (click)="onCategorySelect(selectedCategory()!)" class="hover:text-food-primary/70">✕</button>
+        </span>
       </div>
     </div>
   </section>
@@ -80,6 +125,19 @@
                        [recipe]="recipe"
                        [bgLight]="i < 3">
       </app-recipe-card>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="recipes().length === 0 && (searchTerm() || selectedCategory())" class="text-center py-12">
+      <div class="text-6xl mb-4">🔍</div>
+      <h3 class="text-xl font-bold text-gray-700 mb-2">No recipes found</h3>
+      <p class="text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
+      <button
+        (click)="clearSearch()"
+        class="bg-food-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-food-primary/90 transition"
+      >
+        Clear all filters
+      </button>
     </div>
   </section>
 
