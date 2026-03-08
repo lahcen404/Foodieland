@@ -103,9 +103,9 @@ This command:
 Run inside backend container:
 
 ```bash
-docker compose exec cuisine-backend composer install
-docker compose exec cuisine-backend php artisan key:generate
-docker compose exec cuisine-backend php artisan migrate:refresh --seed
+docker compose exec cuisine_app composer install
+docker compose exec cuisine_app php artisan key:generate
+docker compose exec cuisine_app php artisan migrate:refresh --seed
 
 ```
 
