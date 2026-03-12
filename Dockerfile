@@ -6,6 +6,7 @@ RUN apk add --no-cache \
     git \
     unzip \
     zip \
+    postgresql-client \
     postgresql-dev \
     nodejs \
     npm \
@@ -32,8 +33,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-RUN mkdir -p storage bootstrap/cache \
+RUN mkdir -p vendor storage bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 vendor storage bootstrap/cache
 
 USER www-data

@@ -1,15 +1,14 @@
 {
   "name": "cuisine-frontend",
+  "private": true,
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "NG_CLI_ANALYTICS=false ng serve --host 0.0.0.0 --port 4200 --poll 2000",
+    "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "private": true,
-  "packageManager": "npm@10.8.2",
   "dependencies": {
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
@@ -17,20 +16,17 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "^0.16.1"
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@angular/build": "^21.2.0",
     "@angular/cli": "^21.2.0",
     "@angular/compiler-cli": "^21.2.0",
-    "autoprefixer": "^10.4.27",
-    "jsdom": "^28.0.0",
-    "postcss": "^8.5.8",
-    "prettier": "^3.8.1",
-    "tailwindcss": "^4.2.1",
+    "@types/node": "^22.15.30",
+    "jsdom": "^26.1.0",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.1.0"
   }
 }
