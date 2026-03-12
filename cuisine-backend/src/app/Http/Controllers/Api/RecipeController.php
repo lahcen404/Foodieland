@@ -49,7 +49,9 @@ public function store(Request $request) {
         'author_name' => 'string',
         'image_url' => 'nullable|string',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'ingredients' => 'nullable|array'
+        'ingredients' => 'nullable|array',
+        'ingredients.*.name' => 'required_with:ingredients|string',
+        'ingredients.*.quantity' => 'required_with:ingredients|string',
     ]);
 
     // Handle image upload
@@ -87,7 +89,9 @@ public function store(Request $request) {
             'author_name' => 'string',
             'image_url' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'ingredients' => 'nullable|array'
+            'ingredients' => 'nullable|array',
+            'ingredients.*.name' => 'required_with:ingredients|string',
+            'ingredients.*.quantity' => 'required_with:ingredients|string',
         ]);
 
         // Handle image upload

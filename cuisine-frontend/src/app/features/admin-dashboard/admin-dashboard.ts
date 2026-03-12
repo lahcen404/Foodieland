@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
-import { Recipe } from '../../core/models/recipe.model';
+import { Ingredient, Recipe } from '../../core/models/recipe.model';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
@@ -31,6 +31,7 @@ export class AdminDashboard implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.setIngredients();
     this.loadRecipes();
   }
 
@@ -47,6 +48,26 @@ export class AdminDashboard implements OnInit {
       image_url: [''],
       ingredients: this.fb.array([]),
     });
+  }
+
+  get ingredientsArray(): FormArray {
+    return this.recipeForm.get('ingredients') as FormArray;
+  }
+
+  get ingredientsControls() {
+    return this.ingredientsArray.controls;
+  }
+
+  addIngredient(ingredient?: Partial<Ingredient>): void {
+    this.ingredientsArray.push(this.createIngredientGroup(ingredient));
+  }
+
+  removeIngredient(index: number): void {
+    this.ingredientsArray.removeAt(index);
+
+    if (this.ingredientsArray.length === 0) {
+      this.addIngredient();
+    }
   }
 
   private loadRecipes(): void {
@@ -66,6 +87,7 @@ export class AdminDashboard implements OnInit {
 
   onSubmit(): void {
     if (this.recipeForm.invalid) {
+      this.recipeForm.markAllAsTouched();
       this.errorMessage.set('Please fill in all required fields');
       return;
     }
@@ -74,7 +96,10 @@ export class AdminDashboard implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    const formData = this.recipeForm.value;
+    const formData: Recipe = {
+      ...this.recipeForm.getRawValue(),
+      ingredients: this.getSanitizedIngredients(),
+    };
     const image = this.selectedImage();
 
     if (this.isEditMode() && this.editingId()) {
@@ -125,6 +150,7 @@ export class AdminDashboard implements OnInit {
       author_name: recipe.author_name || recipe.author || '',
       image_url: recipe.image_url,
     });
+    this.setIngredients(recipe.ingredients ?? []);
     // Show existing image preview
     if (recipe.image_url) {
       this.imagePreview.set(recipe.image_url);
@@ -154,6 +180,7 @@ export class AdminDashboard implements OnInit {
   resetForm(): void {
     // clear all form controls and editing state
     this.recipeForm.reset();
+    this.setIngredients();
     this.isEditMode.set(false);
     this.editingId.set(null);
     this.selectedImage.set(null);
@@ -209,5 +236,29 @@ export class AdminDashboard implements OnInit {
       this.showForm.set(true);
       window.scrollTo(0, 0);
     }
+  }
+
+  private createIngredientGroup(ingredient?: Partial<Ingredient>): FormGroup {
+    return this.fb.group({
+      name: [ingredient?.name ?? '', Validators.required],
+      quantity: [ingredient?.quantity ?? '', Validators.required],
+    });
+  }
+
+  private setIngredients(ingredients: Ingredient[] = []): void {
+    this.ingredientsArray.clear();
+
+    if (ingredients.length === 0) {
+      this.addIngredient();
+      return;
+    }
+
+    ingredients.forEach((ingredient) => this.addIngredient(ingredient));
+  }
+
+  private getSanitizedIngredients(): Ingredient[] {
+    return this.ingredientsArray.getRawValue().filter((ingredient: Ingredient) => {
+      return ingredient.name.trim() !== '' || ingredient.quantity.trim() !== '';
+    });
   }
 }

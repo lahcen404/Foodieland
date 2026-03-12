@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 interface BlogPost {
   id: number;
@@ -17,7 +16,7 @@ interface BlogPost {
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, ImageUrlPipe],
+  imports: [CommonModule],
   templateUrl: './blog.html',
   styleUrl: './blog.css'
 })
